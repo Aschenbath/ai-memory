@@ -14614,15 +14614,22 @@ process.exit(0);
         /// The rendered OMP extension with a wider handoff deadline. These
         /// tests prove which session claims, not the production deadline. A
         /// Windows runner executes them beside the full Rust suite, where a
-        /// cold Node fetch can exceed one second.
+        /// cold Node fetch can exceed one second. The hook POST deadline is
+        /// widened too: a POST past it is dropped, losing the event under test.
         fn extension_under_test() -> String {
             let extension = build_omp_extension(PLACEHOLDER_SERVER, None, None, "denylist")
                 .replacen(
                     "signal: timeoutSignal(1000)",
                     "signal: timeoutSignal(5000)",
                     1,
+                )
+                .replacen(
+                    "const HOOK_REQUEST_TIMEOUT_MS = 2000;",
+                    "const HOOK_REQUEST_TIMEOUT_MS = 10000;",
+                    1,
                 );
             assert!(extension.contains("signal: timeoutSignal(5000)"));
+            assert!(extension.contains("const HOOK_REQUEST_TIMEOUT_MS = 10000;"));
             extension
         }
 
