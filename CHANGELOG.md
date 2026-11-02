@@ -13,6 +13,11 @@ version in [`docs/changelog/`](docs/changelog/):
 
 ### Fixed
 
+- The Windows PowerShell hook library no longer fails on Chinese, Japanese and
+  Korean system locales. Windows PowerShell 5.1 reads a script without a BOM in
+  the ANSI code page, so the literal BOM character in the `server =` config
+  match decoded as a double-byte sequence that swallowed the regex's closing
+  `]`. The pattern now spells it as the ASCII escape `\uFEFF`.
 - Project search links now use the project's current stored name after
   resolving a canonical or legacy key. Results, breadcrumbs, and the scope
   selector stay on that project without renaming it (#1875).

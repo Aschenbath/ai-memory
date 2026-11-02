@@ -64,7 +64,7 @@ function Test-AiMemoryMarkerDeclaresSettings {
         if ([regex]::IsMatch($text, "(?m)^\s*$key\s*=")) { return $true }
     }
     if ([regex]::IsMatch($text, '(?m)^\s*aliases\s*=')) { return $true }
-    if ([regex]::IsMatch($text, '(?m)^[\s﻿]*server\s*=')) { return $true }
+    if ([regex]::IsMatch($text, '(?m)^[\s\uFEFF]*server\s*=')) { return $true }
     foreach ($key in @("default_global", "inject_on_session_start", "inject_on_subagent_start", "max_chars", "contribute", "consume", "deliver_on_session_start")) {
         if ([regex]::IsMatch($text, "(?m)^\s*$key\s*=")) { return $true }
     }
@@ -138,7 +138,7 @@ function Test-AiMemoryServerRouted {
             } catch {
                 return $true
             }
-            if ([regex]::IsMatch($text, '(?m)^[\s﻿]*server\s*=')) { return $true }
+            if ([regex]::IsMatch($text, '(?m)^[\s\uFEFF]*server\s*=')) { return $true }
         }
         if ($boundary -and $dir -eq $boundary) { return $false }
         $parent = Split-Path $dir -Parent
